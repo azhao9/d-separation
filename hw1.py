@@ -34,7 +34,13 @@ def dsep(X, Y, Z):
     visited = []
     reachable = []
 
-    L.append((X, -1))
+    into = df[X]
+    out = df.iloc[X - 1]
+
+    if into[into == 1].any():
+        L.append((X, -1))
+    else:
+        L.append((X, 1))
 
     while L:
         node = L.pop()
