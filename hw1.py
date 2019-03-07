@@ -1,10 +1,12 @@
 import pandas as pd
 
 def main():
+    # query 1
     X1 = 61
     Y1 = 68
     Z1 = [4, 19, 90]
 
+    # query 2
     X2 = 55
     Y2 = 27
     Z2 = [4, 8, 9, 12, 29, 32, 40, 44, 45, 48, 50, 52]
@@ -15,7 +17,9 @@ def main():
 def dsep(X, Y, Z):
     df = pd.read_csv('dag.txt', sep=' ')
     df.columns = df.columns.astype(int)
+
     # phase 1
+    # adds all ancestors of Z
     ancestors = []
     L = Z
 
@@ -31,12 +35,14 @@ def dsep(X, Y, Z):
         ancestors.append(v)
 
     # phase 2
+    # identifies reachable nodes from the starting
     visited = []
     reachable = []
 
     into = df[X]
     out = df.iloc[X - 1]
 
+    # initializes L
     if into[into == 1].any():
         L.append((X, -1))
     else:
@@ -45,6 +51,7 @@ def dsep(X, Y, Z):
     while L:
         node = L.pop()
 
+        # prevents infinite looping
         if node not in visited:
             v = node[0]
             parents = df[v]
@@ -55,6 +62,7 @@ def dsep(X, Y, Z):
 
             visited.append(node)
 
+            # BFS from X
             if node[1] == 1 and v not in Z:
                 for pa in parents[parents == 1].index:
                     L.append((pa, 1))
